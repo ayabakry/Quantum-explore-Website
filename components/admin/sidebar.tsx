@@ -17,7 +17,7 @@ export default function AdminSidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="flex h-screen w-64 flex-col border-r bg-muted/40">
+    <div className="flex h-screen w-64 flex-col border-r mt-4 ">
       
       <div className="flex-1 overflow-auto py-2">
         <nav className="grid items-start px-2 text-sm">

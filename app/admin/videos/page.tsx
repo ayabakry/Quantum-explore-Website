@@ -68,7 +68,6 @@ export default function AdminVideos() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
-                <TableHead className="hidden md:table-cell">Category</TableHead>
                 <TableHead className="hidden md:table-cell">Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -80,12 +79,10 @@ export default function AdminVideos() {
                     <TableCell className="font-medium">
                       <div>
                         {video.title}
-                        <p className="text-sm text-muted-foreground md:hidden">{video.category}</p>
+                        {/* <p className="text-sm text-muted-foreground md:hidden">{video.category}</p> */}
                       </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline">{video.category}</Badge>
-                    </TableCell>
+                   
                     <TableCell className="hidden md:table-cell">{new Date(video.date).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">

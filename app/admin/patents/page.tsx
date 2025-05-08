@@ -68,7 +68,6 @@ export default function AdminPatents() {
               <TableRow>
                 <TableHead>Patent ID</TableHead>
                 <TableHead>Title</TableHead>
-                <TableHead className="hidden md:table-cell">Status</TableHead>
                 <TableHead className="hidden md:table-cell">Filing Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -86,9 +85,7 @@ export default function AdminPatents() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <Badge variant={patent.status === "Granted" ? "default" : "outline"}>{patent.status}</Badge>
-                    </TableCell>
+                   
                     <TableCell className="hidden md:table-cell">
                       {new Date(patent.filingDate).toLocaleDateString()}
                     </TableCell>

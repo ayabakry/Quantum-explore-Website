@@ -67,7 +67,6 @@ export default function AdminTutorials() {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead className="hidden md:table-cell">Type</TableHead>
-                <TableHead className="hidden md:table-cell">Category</TableHead>
                 <TableHead className="hidden md:table-cell">Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -104,9 +103,7 @@ export default function AdminTutorials() {
                         {tutorial.type.toUpperCase()}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline">{tutorial.category}</Badge>
-                    </TableCell>
+                    
                     <TableCell className="hidden md:table-cell">
                       {new Date(tutorial.date).toLocaleDateString()}
                     </TableCell>

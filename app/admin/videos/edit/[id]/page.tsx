@@ -178,20 +178,7 @@ export default function EditVideo() {
               {errors.description && <p className="text-sm text-destructive">{errors.description}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select value={formData.category} onValueChange={handleSelectChange}>
-                <SelectTrigger id="category" className={errors.category ? "border-destructive" : ""}>
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="basics">Basics</SelectItem>
-                  <SelectItem value="advanced">Advanced</SelectItem>
-                  <SelectItem value="applications">Applications</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.category && <p className="text-sm text-destructive">{errors.category}</p>}
-            </div>
+          
 
             <div className="space-y-2">
               <Label htmlFor="youtubeId">YouTube ID</Label>
