@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-
+import type * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,34 +9,41 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useStore } from "@/lib/store"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import type { Tutorial } from "@/lib/store"
 
-export default function EditTutorial({ params }: { params: { id: string } }) {
+export default function EditTutorial() {
   const { tutorials, updateTutorial } = useStore()
   const router = useRouter()
   const { toast } = useToast()
+  // Use the useParams hook instead of receiving params as a prop
+  const params = useParams()
+  const tutorialId = params.id as string
 
   const [formData, setFormData] = useState<Tutorial | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const tutorial = tutorials.find((t) => t.id === params.id)
-    if (tutorial) {
-      setFormData(tutorial)
-    } else {
-      toast({
-        title: "Tutorial not found",
-        description: "The requested tutorial could not be found.",
-      })
-      router.push("/admin/tutorials")
+    // Only run this effect once on component mount
+    if (isLoading) {
+      const tutorialId = params.id as string
+      const tutorial = tutorials.find((t) => t.id === tutorialId)
+      if (tutorial) {
+        setFormData({ ...tutorial })
+      } else {
+        toast({
+          title: "Tutorial not found",
+          description: "The requested tutorial could not be found.",
+        })
+        router.push("/admin/tutorials")
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
-  }, [params.id, tutorials, router, toast])
+  }, [isLoading, tutorials, router, toast, params])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!formData) return
@@ -107,7 +113,7 @@ export default function EditTutorial({ params }: { params: { id: string } }) {
     }
 
     // Update the tutorial
-    updateTutorial(params.id, formData)
+    updateTutorial(tutorialId, formData)
 
     toast({
       title: "Tutorial updated",

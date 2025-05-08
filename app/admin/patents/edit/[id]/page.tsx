@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-
+import type * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,34 +9,41 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useStore } from "@/lib/store"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Plus, X } from "lucide-react"
 import Link from "next/link"
 import type { Patent } from "@/lib/store"
 
-export default function EditPatent({ params }: { params: { id: string } }) {
+export default function EditPatent() {
   const { patents, updatePatent } = useStore()
   const router = useRouter()
   const { toast } = useToast()
+  // Use the useParams hook instead of receiving params as a prop
+  const params = useParams()
+  const patentId = params.id as string
 
   const [formData, setFormData] = useState<Patent | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const patent = patents.find((p) => p.id === params.id)
-    if (patent) {
-      setFormData(patent)
-    } else {
-      toast({
-        title: "Patent not found",
-        description: "The requested patent could not be found.",
-      })
-      router.push("/admin/patents")
+    // Only run this effect once on component mount
+    if (isLoading) {
+      const patentId = params.id as string
+      const patent = patents.find((p) => p.id === patentId)
+      if (patent) {
+        setFormData(patent)
+      } else {
+        toast({
+          title: "Patent not found",
+          description: "The requested patent could not be found.",
+        })
+        router.push("/admin/patents")
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
-  }, [params.id, patents, router, toast])
+  }, [isLoading, patents, router, toast, params])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!formData) return
@@ -134,7 +140,7 @@ export default function EditPatent({ params }: { params: { id: string } }) {
     }
 
     // Update the patent
-    updatePatent(params.id, {
+    updatePatent(patentId, {
       ...formData,
       inventors: formData.inventors.filter((inventor) => inventor.trim()),
       issueDate: formData.status === "Granted" ? formData.issueDate : null,

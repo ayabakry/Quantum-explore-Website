@@ -7,7 +7,7 @@ import { Activity, FileText, Film, Home, LogOut, Mail, Settings, User } from "lu
 import Image from "next/image"
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: Home },
+  // { name: "Dashboard", href: "/admin", icon: Home },
   { name: "Videos", href: "/admin/videos", icon: Film },
   { name: "Tutorials", href: "/admin/tutorials", icon: FileText },
   { name: "Patents", href: "/admin/patents", icon: FileText },

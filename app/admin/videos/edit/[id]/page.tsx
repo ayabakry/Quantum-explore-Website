@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-
+import type * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,35 +9,41 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useStore } from "@/lib/store"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import type { Video } from "@/lib/store"
 
-export default function EditVideo({ params }: { params: { id: string } }) {
+export default function EditVideo() {
   const { videos, updateVideo } = useStore()
   const router = useRouter()
   const { toast } = useToast()
+  // Use the useParams hook instead of receiving params as a prop
+  const params = useParams()
+  const videoId = params.id as string
 
   const [formData, setFormData] = useState<Video | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const videoId = params.id
-    const video = videos.find((v) => v.id === videoId)
-    if (video) {
-      setFormData({ ...video })
-    } else {
-      toast({
-        title: "Video not found",
-        description: "The requested video could not be found.",
-      })
-      router.push("/admin/videos")
+    // Only run this effect once on component mount
+    if (isLoading) {
+      const videoId = params.id as string
+      const video = videos.find((v) => v.id === videoId)
+      if (video) {
+        setFormData({ ...video })
+      } else {
+        toast({
+          title: "Video not found",
+          description: "The requested video could not be found.",
+        })
+        router.push("/admin/videos")
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
-  }, [videos, router, toast, params])
+  }, [isLoading, videos, router, toast, params])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!formData) return
@@ -104,10 +109,10 @@ export default function EditVideo({ params }: { params: { id: string } }) {
     }
 
     // Add this right before the updateVideo call
-    console.log("Updating video:", params.id, formData)
+    console.log("Updating video:", videoId, formData)
 
     // Update the video with all fields from formData
-    updateVideo(params.id, {
+    updateVideo(videoId, {
       title: formData.title,
       description: formData.description,
       youtubeId: formData.youtubeId,
